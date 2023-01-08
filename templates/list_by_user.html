@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <h1 class="display-4">Kanban App - user list</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        {% for list in lists %}
+            <div>
+            <h3>{{ list["list_name"] }}</h3>
+            {{ list["list_date"] }}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="col-md-4">
+        side bar
+    </div>
+</div>
+
+{% endblock %}

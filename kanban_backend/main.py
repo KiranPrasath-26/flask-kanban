@@ -40,7 +40,7 @@ flask_wtf.CSRFProtect(app)
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-CORS(app)
+CORS(app, support_credentials=True)
 
 #Import the controllers
 from application.controllers import *

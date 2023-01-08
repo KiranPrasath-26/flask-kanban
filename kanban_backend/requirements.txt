@@ -6,6 +6,8 @@ click
 dataclasses
 dnspython
 email-validator
+bleach
+Flask-Cors
 Flask
 Flask-BabelEx
 Flask-Login

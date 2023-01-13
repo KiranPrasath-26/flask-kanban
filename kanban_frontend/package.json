@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@heroicons/vue": "^2.0.13",
+    "@vue-hero-icons/solid": "^1.7.2",
     "daisyui": "^2.46.1",
     "pinia": "^2.0.28",
     "vue": "^3.2.45",

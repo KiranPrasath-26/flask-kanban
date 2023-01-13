@@ -19,7 +19,7 @@ def abort_if_not_found(obj):
         abort(404, message="Resource not found")
 
 def get_user(user_id):
-    user = Users.query.filter(Users.user_id == user_id).first()
+    user = Users.query.filter(Users.id == user_id).first()
     return user
 
 def validate_email(email):

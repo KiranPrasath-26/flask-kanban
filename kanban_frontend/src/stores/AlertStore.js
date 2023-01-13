@@ -24,6 +24,9 @@ export const useAlertStore = defineStore("Alert", {
                 if (alert.id == id)
                     alert.dismissed = true;
             });
-        }
+        },
+        // toggleShowSidebar() {
+        //     this.showSidebar = !this.showSidebar;
+        // }
     }
 })

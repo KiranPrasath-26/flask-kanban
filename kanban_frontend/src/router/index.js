@@ -2,13 +2,35 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '@/views/Dashboard.vue';
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
-import Home from '@/views/Home.vue'
+import Template from '@/views/Template.vue'
+import AddList from '@/views/AddList.vue';
+import AddCard from '@/views/AddCard.vue';
+import InfoUser from '@/views/InfoUser.vue';
+import Lists from '@/views/Lists.vue'
 import { useAuthStore } from '@/stores/AuthStore';
 
 const routes = [
     { path: "/", redirect: '/login'},
     { path: '/login', name: 'Login', component: Login },
-    { path: '/register', name: 'Register', component: Register }
+    { path: '/register', name: 'Register', component: Register },
+    {
+        path: '/',
+        name: 'Template',
+        component: Template,
+        meta: { requiresAuth: true },
+        children: [
+            { path: 'Dashboard', name: 'Dashboard', component: Dashboard },
+            { path: 'lists', name: 'Lists', component: Lists },
+            // { path: 'decks/:id', name: 'Deck Cards', component: DeckCards },
+            // { path: 'review/:id', name: 'Deck Review', component: DeckReview},
+            { path: 'infouser', name: 'InfoUser', component: InfoUser },
+            { path: 'add-list', name: 'Add List', component: AddList },
+            { path: 'add-card', name: 'Add Card', component: AddCard },
+            // { path: 'export', name: 'Export Deck', component: ExportDeck },
+            // { path: 'update_webhook', name: 'Update Webhook', component: UpdateWebhook }
+        ]
+    },
+    { path: '/:pathMatch(.*)*', redirect: '/' },
 ]
 
 const router = createRouter({

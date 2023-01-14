@@ -17,6 +17,9 @@ export const useDataStore = defineStore("DataStore", {
         getCardsByListId: (state) => {
             return (list_id) => state.cards.filter(card => card.list_id == list_id)
         },
+        getCardByCardId: (state) => {
+            return (card_id) => state.cards.filter(card => (card.card_id == card_id))
+        },
     },
     actions: {
         // pushJob(job_id,list_id,list_name){
@@ -117,15 +120,59 @@ export const useDataStore = defineStore("DataStore", {
             }) 
         },
 
+        async updateCard(card_id, list_id, title, content, deadline=null, completed_on=null, flag=0){
+            const AlertStore = useAlertStore();
+            const AuthStore = useAuthStore();
+            
+            const data = {
+                list_id : list_id,
+                title : title,
+                content : content,
+                created_time : new Date().toLocaleString(),
+                deadline : deadline,
+                completed_on : completed_on,
+                flag : flag
+            }
+
+            await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/card/${card_id}`, {
+                "method": "PUT",
+                "headers": {
+                    "Authentication-Token": AuthStore.authenticationToken,
+                    "Content-Type": "application/json"
+                },
+                "body": JSON.stringify(data)
+            })
+            .then(resp => {
+                if(parseInt(resp.status) >= 400){
+                    throw Error("Unable to add card");
+                }
+                return resp.json();
+            })
+            .then(data => {
+                this.cards.push(data);
+                AlertStore.pushAlert({
+                    type: 'info',
+                    message: 'New card added'
+                })
+            })
+            .catch(err => {
+                AlertStore.pushAlert({
+                    type: 'error',
+                    message: 'Unable to add card'
+                })
+                console.log(err);
+            }) 
+        },
+
         async addList(list_name){
             const AlertStore = useAlertStore();
             const AuthStore = useAuthStore();
 
             const data = {
-                user_id: this.user.id,
-                list_name: list_name,
-                list_date: new Date().toLocaleString(),
-                score: 0
+                user_id : this.user.id,
+                list_name : list_name,
+                list_date : new Date().toLocaleString(),
+                score : 0
             }
 
             await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/list`, {
@@ -152,7 +199,7 @@ export const useDataStore = defineStore("DataStore", {
             .catch(err => {
                 AlertStore.pushAlert({
                     type: 'error',
-                    message: 'Unable to add deck'
+                    message: 'Unable to add list'
                 })
                 console.log(err);
             })
@@ -210,26 +257,26 @@ export const useDataStore = defineStore("DataStore", {
                     })
                 .then(resp => {
                     if(parseInt(resp.status) >= 400){
-                        throw Error("Unable to delete deck");
+                        throw Error("Unable to delete list");
                     }
                     return resp.json();
                 })
                 .then(data => {
-                    for(let i=0; i<this.decks.length; i++){
-                        if(this.decks[i].deck_id == deck_id){
-                            this.decks.splice(i,1);
+                    for(let i=0; i<this.lists.length; i++){
+                        if(this.lists[i].list_id == list_id){
+                            this.lists.splice(i,1);
                             i--;
                         }
                     }
                     for(let i=0; i<this.cards.length; i++){
-                        if(this.cards[i].deck_id == deck_id){
+                        if(this.cards[i].list_id == list_id){
                             this.cards.splice(i,1);
                             i--;
                         }
                     }
                     AlertStore.pushAlert({
                         type: 'info',
-                        message: `Deleted the deck with deck_id ${deck_id}`
+                        message: `Deleted the deck with deck_id ${list_id}`
                     })
                 })
                 .catch(err => {

@@ -7,7 +7,9 @@ import AddList from '@/views/AddList.vue';
 import AddCard from '@/views/AddCard.vue';
 import InfoUser from '@/views/InfoUser.vue';
 import Lists from '@/views/Lists.vue'
+import Cards from '@/views/Cards.vue'
 import { useAuthStore } from '@/stores/AuthStore';
+import UpdateCard from '@/views/UpdateCard.vue';
 
 const routes = [
     { path: "/", redirect: '/login'},
@@ -21,7 +23,8 @@ const routes = [
         children: [
             { path: 'Dashboard', name: 'Dashboard', component: Dashboard },
             { path: 'lists', name: 'Lists', component: Lists },
-            // { path: 'decks/:id', name: 'Deck Cards', component: DeckCards },
+            { path: 'lists/:id', name: 'List Cards', component: Cards },
+            { path: '/card/:cid', name: 'Update Card', component: UpdateCard },
             // { path: 'review/:id', name: 'Deck Review', component: DeckReview},
             { path: 'infouser', name: 'InfoUser', component: InfoUser },
             { path: 'add-list', name: 'Add List', component: AddList },
@@ -51,7 +54,7 @@ router.beforeEach( (to, from) => {
             path: '/dashboard'
         }
     }
-    else if(to.name == 'Deck Review' && from.name != 'Decks' && from.name != 'Deck Review'){
+    else if(to.name == 'List Review' && from.name != 'Lists' && from.name != 'List Review'){
         return {
             path: '/dashboard'
         }

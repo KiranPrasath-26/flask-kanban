@@ -1,6 +1,5 @@
 <script>
 import { useDataStore } from '@/stores/DataStore'
-
 export default {
     setup() {
         const DataStore = useDataStore();
@@ -23,22 +22,23 @@ export default {
     methods: {
         async addCard() {
             if(!this.list_id){
-                alert("Please select a deck");
-                this.errors.push("please select a deck");
+                alert("Please select a list");
+                this.errors.push("please select a list");
                 return false;
             }
             if(!this.title){
-                alert("Please enter something for front");
+                alert("Please enter something for title");
                 return false;
             }
             if(!this.content){
-                alert("Please enter something for back");
+                alert("Please enter something for content");
                 return false;
             }
-            await this.DataStore.addCard(this.list_id,this.title,this.content);
+            await this.DataStore.addCard(this.list_id,this.title,this.content, this.deadline);
             this.list_id = null;
             this.title = '';
             this.content = '';
+            this.deadline = '';
         }
     }
 }
@@ -69,6 +69,11 @@ export default {
                   <textarea v-model="content" id="content" name="content" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md p-3" placeholder="Complete Lab 4 Assignment" />
                 </div>
               </div>
+            <div>
+              <label for="deadline" class="block text-sm font-medium text-gray-700"> DeadLine </label>
+                <input type="datetime-local" v-model="deadline" id="deadline" name="deadline"/>
+                <!-- <date-pick v-model="date" :pickTime="true" :format="'DD/MM/YYYY, HH:mm:ss'"></date-pick> -->
+            </div>
             </div>
             <div v-for="error in errors">{{ error }}</div>
             <div class="px-4 py-3 bg-gray-50 sm:px-6">

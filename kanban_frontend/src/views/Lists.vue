@@ -1,15 +1,15 @@
 <script>
-import { useAlertStore } from "@/stores/AlertStore";
+import { useDataStore } from "@/stores/DataStore";
 import ListItem from "@/components/ListItem.vue";
 
 export default {
     setup() {
-        const AlertStore = useAlertStore();
-        return { AlertStore };
+        const DataStore = useDataStore();
+        return { DataStore };
     },
     computed: {
-        decks() {
-            return this.AlertStore.lists;
+        lists() {
+            return this.DataStore.lists;
         }
     },
     components: { ListItem }

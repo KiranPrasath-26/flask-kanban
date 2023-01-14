@@ -2,11 +2,10 @@ module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
+    "./node_modules/vue-tailwind-datepicker/**/*.js"
   ],
   darkMode: 'class',
-  theme: {
-    extend: {},
-  },
+  theme: {},
   daisyui: {
     themes: ["light", "dark", {
       mytheme: {
@@ -31,5 +30,7 @@ module.exports = {
       },
     },],
   },
-  plugins: [require("daisyui")],
+  plugins: [
+    require("daisyui"),
+  ],
 }

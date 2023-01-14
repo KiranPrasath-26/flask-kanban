@@ -5,10 +5,11 @@ from flask_restful import Resource, fields, marshal_with, reqparse, marshal
 from application.database import db 
 from application.models import *
 from application.validation import *
+from flask_security import auth_required
 
 
 user_fields = {
-    "user_id" : fields.Integer,
+    "id" : fields.Integer,
     "username" : fields.String,
     "email" : fields.String,
 }
@@ -68,6 +69,7 @@ update_card_parser.add_argument("flag")
 
 
 class UserAPI(Resource):
+    @auth_required('token')
     @marshal_with(user_fields)
     def get(self, user_id):
         # Get the username
@@ -114,6 +116,7 @@ class UserAPI(Resource):
         
         return user
 
+    @auth_required('token')
     @marshal_with(user_fields)
     def delete(self, user_id):
         user = get_user(user_id)
@@ -165,7 +168,7 @@ class UserDataAPI(Resource):
         user_data["lists"] = marshal(user.dlist, list_fields)
         user_data["cards"] = []
         for list in user.dlist:
-            user_data["cards"].extend(marshal(list.dcards, card_fields))
+            user_data["cards"].extend(marshal(list.dcard, card_fields))
         return user_data, 200
 
 class UserListsAPI(Resource):
@@ -177,12 +180,14 @@ class UserListsAPI(Resource):
         return lists
     
 class ListAPI(Resource):
+    @auth_required('token')
     @marshal_with(list_fields)
     def get(self, list_id = None):
         list = get_list(list_id)
         abort_if_not_found(list)
         return list
-    
+
+    @auth_required('token')
     @marshal_with(list_fields)
     def put(self, list_id):
         list = get_list(list_id)
@@ -202,7 +207,8 @@ class ListAPI(Resource):
         db.session.commit()
 
         return list
-
+    
+    @auth_required('token')
     def delete(self, list_id):
         list = get_list(list_id)
         abort_if_not_found(list)
@@ -210,6 +216,7 @@ class ListAPI(Resource):
         db.session.commit()
         return {"message": "Successfully Deleted"}, 200
     
+    @auth_required('token')
     @marshal_with(list_fields)
     def post(self):
         args = create_list_parser.parse_args()
@@ -251,6 +258,7 @@ class ListAPI(Resource):
         return list, 201
 
 class ListCardsAPI(Resource):
+    @auth_required('token')
     @marshal_with(card_fields)
     def get(self, list_id):
         list = get_list(list_id)
@@ -259,12 +267,14 @@ class ListCardsAPI(Resource):
         return cards
 
 class CardAPI(Resource):
+    @auth_required('token')
     @marshal_with(card_fields)
     def get(self, card_id):
         card = get_card(card_id)
         abort_if_not_found(card)
         return card
 
+    @auth_required('token')
     @marshal_with(card_fields)
     def put(self, card_id):
         card = get_card(card_id)
@@ -293,6 +303,7 @@ class CardAPI(Resource):
         db.session.commit()
         return card
 
+    @auth_required('token')
     def delete(self, card_id):
         card = get_card(card_id)
         abort_if_not_found(card)
@@ -300,6 +311,7 @@ class CardAPI(Resource):
         db.session.commit()
         return {"message": "Successfully Deleted"}, 200
 
+    @auth_required('token')
     @marshal_with(card_fields)
     def post(self):
         args = create_card_parser.parse_args()

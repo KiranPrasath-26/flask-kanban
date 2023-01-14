@@ -34,6 +34,10 @@ export default {
                 alert("Please enter something for content");
                 return false;
             }
+            if(!this.deadline){
+              this.deadline = null;
+            }
+            
             await this.DataStore.addCard(this.list_id,this.title,this.content, this.deadline);
             this.list_id = null;
             this.title = '';

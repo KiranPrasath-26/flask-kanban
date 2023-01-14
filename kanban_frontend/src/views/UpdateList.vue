@@ -8,17 +8,23 @@ export default {
     },
     data() {
         return {
-            list_name: ''
+            list_name: '',
         }
     },
     methods: {
-        async addList() {
+        async updateList() {
             if(!this.list_name){
                 alert("Please enter a list name");
                 return false;
             }
-            await this.DataStore.addList(this.list_name);
+            console.log(this.list);
+            await this.DataStore.updateList(this.list.list_id,this.list_name);
             this.list_name = '';
+        }
+    },
+    computed: {
+        list() {
+            return this.DataStore.getListByListId(this.$route.params.id)[0];
         }
     }
 }
@@ -42,7 +48,7 @@ export default {
               
             </div>
             <div class="px-4 py-3 bg-gray-50 sm:px-6">
-              <button @click="addList()" class="btn btn-primary py-0">Update List</button>
+              <button @click="updateList()" class="btn btn-primary py-0">Update List</button>
             </div>
           </div>
       </div>

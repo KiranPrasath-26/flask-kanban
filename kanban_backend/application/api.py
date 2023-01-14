@@ -30,7 +30,7 @@ card_fields = {
     "created_time": fields.String,
     "deadline": fields.String,
     "completed_on": fields.String,
-    "flag": fields.String
+    "flag": fields.Integer
 }
 
 create_user_parser = reqparse.RequestParser()
@@ -61,6 +61,7 @@ create_card_parser.add_argument("completed_on")
 create_card_parser.add_argument("flag")
 
 update_card_parser = reqparse.RequestParser()
+update_card_parser.add_argument("list_id")
 update_card_parser.add_argument("title")
 update_card_parser.add_argument("content")
 update_card_parser.add_argument("deadline")
@@ -285,7 +286,7 @@ class CardAPI(Resource):
         content = args.get("content", None)
         deadline = args.get("deadline", None)
         completed_on = args.get("completed_on", None)
-        flag = args.get("flag", None)
+        flag = args.get("flag", 0)
 
         validate_title(title)
         validate_content(content)

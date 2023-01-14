@@ -10,6 +10,7 @@ import Lists from '@/views/Lists.vue'
 import Cards from '@/views/Cards.vue'
 import { useAuthStore } from '@/stores/AuthStore';
 import UpdateCard from '@/views/UpdateCard.vue';
+import UpdateList from '@/views/UpdateList.vue';
 
 const routes = [
     { path: "/", redirect: '/login'},
@@ -24,6 +25,7 @@ const routes = [
             { path: 'Dashboard', name: 'Dashboard', component: Dashboard },
             { path: 'lists', name: 'Lists', component: Lists },
             { path: 'lists/:id', name: 'List Cards', component: Cards },
+            { path: 'updatelist/:id', name: 'Update List', component: UpdateList },
             { path: '/card/:cid', name: 'Update Card', component: UpdateCard },
             // { path: 'review/:id', name: 'Deck Review', component: DeckReview},
             { path: 'infouser', name: 'InfoUser', component: InfoUser },

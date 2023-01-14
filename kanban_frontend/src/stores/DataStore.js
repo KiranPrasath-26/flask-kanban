@@ -20,6 +20,9 @@ export const useDataStore = defineStore("DataStore", {
         getCardByCardId: (state) => {
             return (card_id) => state.cards.filter(card => (card.card_id == card_id))
         },
+        getListByListId: (state) => {
+            return (list_id) => state.lists.filter(list => list.list_id == list_id)
+        },
     },
     actions: {
         // pushJob(job_id,list_id,list_name){
@@ -120,15 +123,14 @@ export const useDataStore = defineStore("DataStore", {
             }) 
         },
 
-        async updateCard(card_id, list_id, title, content, deadline=null, completed_on=null, flag=0){
+        async updateCard(card_id, list_id, title, content, deadline=null, completed_on=null, flag=null){
             const AlertStore = useAlertStore();
             const AuthStore = useAuthStore();
-            
+
             const data = {
-                list_id : list_id,
+                list_id: list_id,
                 title : title,
                 content : content,
-                created_time : new Date().toLocaleString(),
                 deadline : deadline,
                 completed_on : completed_on,
                 flag : flag
@@ -149,11 +151,17 @@ export const useDataStore = defineStore("DataStore", {
                 return resp.json();
             })
             .then(data => {
-                this.cards.push(data);
-                AlertStore.pushAlert({
-                    type: 'info',
-                    message: 'New card added'
-                })
+                for(let i=0; i<this.cards.length; i++){
+                    if(this.cards[i].card_id == card_id){
+                        this.cards.splice(i,1);
+                        i--;
+                    }
+                    this.cards.push(data);
+                    AlertStore.pushAlert({
+                        type: 'info',
+                        message: 'New card added'
+                    })
+                }
             })
             .catch(err => {
                 AlertStore.pushAlert({
@@ -190,6 +198,53 @@ export const useDataStore = defineStore("DataStore", {
                 return resp.json();
             })
             .then(data => {
+                this.lists.push(data);
+                AlertStore.pushAlert({
+                    type: 'info',
+                    message: 'New list added'
+                })
+            })
+            .catch(err => {
+                AlertStore.pushAlert({
+                    type: 'error',
+                    message: 'Unable to add list'
+                })
+                console.log(err);
+            })
+
+            console.log(data);
+        },
+
+        async updateList(list_id,list_name){
+            const AlertStore = useAlertStore();
+            const AuthStore = useAuthStore();
+
+            const data = {
+                user_id : this.user.id,
+                list_name : list_name,
+            }
+
+            await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/list/${list_id}`, {
+                "method": "PUT",
+                "headers": {
+                    "Authentication-Token": AuthStore.authenticationToken,
+                    "Content-Type": "application/json"
+                },
+                "body": JSON.stringify(data)
+            })
+            .then(resp => {
+                if(parseInt(resp.status) >= 400){
+                    throw Error("Unable to add list");
+                }
+                return resp.json();
+            })
+            .then(data => {
+                for(let i=0; i<this.lists.length; i++){
+                    if(this.lists[i].list_id == list_id){
+                        this.lists.splice(i,1);
+                        i--;
+                    }
+                }
                 this.lists.push(data);
                 AlertStore.pushAlert({
                     type: 'info',

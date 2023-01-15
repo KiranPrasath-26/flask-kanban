@@ -128,12 +128,12 @@ def validate_completed_on(completed_on):
             error_message="completed_on should be either None or should be in valid datetime format"
         )
 
-def validate_flag(flag):
-    if flag is None:
-        return
-    if int(flag)!=0 and int(flag)!=1:
-        raise APIError(
-            status_code=400,
-            error_code="CARD_ERR_06",
-            error_message="flag can only take the values null/0/1"
-        )
+# def validate_flag(flag):
+#     if flag is None:
+#         return
+#     if int(flag)!=0 and int(flag)!=1:
+#         raise APIError(
+#             status_code=400,
+#             error_code="CARD_ERR_06",
+#             error_message="flag can only take the values null/0/1"
+#         )

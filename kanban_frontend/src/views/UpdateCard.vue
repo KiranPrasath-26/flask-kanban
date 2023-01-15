@@ -7,6 +7,7 @@ export default {
     },
     data() {
         return {
+            list_id: '',
             title: '',
             content: '',
             deadline: '',
@@ -38,11 +39,14 @@ export default {
             }
             console.log("deadline",this.deadline)
             console.log("conent",this.content)
+            console.log("title",this.title)
+            console.log("List_id",this.list_id)
+            console.log("card",this.card)
             await this.DataStore.updateCard(this.card.card_id, this.list_id, this.title, this.content, this.deadline);
             this.title = ''
             this.content = ''
             this.deadline = ''
-        }
+        },
     }
 }
 </script>
@@ -81,8 +85,8 @@ export default {
             <div v-for="error in errors">{{ error }}</div>
             <div class="px-4 py-3 bg-gray-50 sm:px-6">
               <button @click="updateCard()" class="btn btn-primary py-0">Update Card</button>
-            </div>
           </div>
+        </div>
       </div>
     </div>
   </div>

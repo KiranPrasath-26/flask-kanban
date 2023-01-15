@@ -79,7 +79,7 @@ export const useDataStore = defineStore("DataStore", {
         
 
 
-        async addCard(list_id, title, content, deadline=null){
+        async addCard(list_id, title, content, deadline){
             const AlertStore = useAlertStore();
             const AuthStore = useAuthStore();
             
@@ -90,7 +90,7 @@ export const useDataStore = defineStore("DataStore", {
                 created_time : new Date().toLocaleString(),
                 deadline : deadline,
                 completed_on : null,
-                flag : null
+                flag : 0
             }
 
             await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/card`, {
@@ -123,7 +123,7 @@ export const useDataStore = defineStore("DataStore", {
             }) 
         },
 
-        async updateCard(card_id, list_id, title, content, deadline=null, completed_on=null, flag=null){
+        async updateCard(card_id, list_id, title, content, deadline, completed_on, flag){
             const AlertStore = useAlertStore();
             const AuthStore = useAuthStore();
 

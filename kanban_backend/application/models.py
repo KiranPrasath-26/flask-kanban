@@ -15,7 +15,7 @@ class Users(db.Model, UserMixin):
     fs_uniquifier = db.Column(db.String(255), unique=True, nullable = False)
     webhook_url = db.Column(db.String(255),unique=True)
     roles = db.relationship('Role', secondary = roles_users, backref = db.backref('user', lazy = 'dynamic'))
-    dlist = db.relationship('Lists', cascade='all, delete-orphan', backref='list')
+    dlist = db.relationship('Lists', cascade='all, delete-orphan', backref='user')
 
     def get_security_payload(self):
         return {
@@ -38,7 +38,7 @@ class Lists(db.Model):
     list_date = db.Column(db.String)
     score = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    dcard = db.relationship('Cards', cascade='all, delete-orphan', backref='card')
+    dcard = db.relationship('Cards', cascade='all, delete-orphan', backref='list')
 
 class Cards(db.Model):
     __tablename__ = 'card'

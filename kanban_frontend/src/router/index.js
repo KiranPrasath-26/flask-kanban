@@ -11,6 +11,7 @@ import Cards from '@/views/Cards.vue'
 import { useAuthStore } from '@/stores/AuthStore';
 import UpdateCard from '@/views/UpdateCard.vue';
 import UpdateList from '@/views/UpdateList.vue';
+import ExportList from '@/views/ExportList.vue';
 
 const routes = [
     { path: "/", redirect: '/login'},
@@ -27,12 +28,10 @@ const routes = [
             { path: 'lists/:id', name: 'List Cards', component: Cards },
             { path: 'updatelist/:id', name: 'Update List', component: UpdateList },
             { path: '/card/:cid', name: 'Update Card', component: UpdateCard },
-            // { path: 'review/:id', name: 'Deck Review', component: DeckReview},
             { path: 'infouser', name: 'InfoUser', component: InfoUser },
             { path: 'add-list', name: 'Add List', component: AddList },
             { path: 'add-card', name: 'Add Card', component: AddCard },
-            // { path: 'export', name: 'Export Deck', component: ExportDeck },
-            // { path: 'update_webhook', name: 'Update Webhook', component: UpdateWebhook }
+            { path: 'exportlist', name: 'Export List', component: ExportList },
         ]
     },
     { path: '/:pathMatch(.*)*', redirect: '/' },

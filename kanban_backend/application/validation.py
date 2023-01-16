@@ -38,13 +38,6 @@ def validate_username(username):
             error_message="valid username is required"
         )
 
-# def validate_password(password):
-#     if (password is None) or (password.isnumeric()) or (len(password) == 0):
-#         raise APIError(
-#             status_code=400,
-#             error_code="USER_ERR_02",
-#             error_message="valid password is required"
-#         )
 
 def get_list(list_id):
     list = Lists.query.filter(Lists.list_id == list_id).first()

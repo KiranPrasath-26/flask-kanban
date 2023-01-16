@@ -30,7 +30,7 @@ export default {
     <div class="md:grid md:gap-6">
       
       <div class="mt-5 md:mt-0">
-          <div class="shadow sm:rounded-md sm:overflow-hidden">
+          <div class="shadow-lg sm:rounded-md sm:overflow-hidden">
             <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
               <div>
                 <label for="list-name" class="block text-sm font-medium text-gray-700"> List Name </label>

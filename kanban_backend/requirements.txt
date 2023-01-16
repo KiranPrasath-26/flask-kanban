@@ -33,3 +33,6 @@ typing_extensions
 Werkzeug
 WTForms
 zipp
+redis
+celery[redis]
+flask-sse

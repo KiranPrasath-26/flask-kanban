@@ -108,16 +108,15 @@ export default {
 
                 <div @click="register()">
                     <button
-                        class="btn shadow-md btn-info shadow-blue-400 dark:btn-warning dark:shadow-orange-300 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-black"
+                        class="btn shadow-md btn-info shadow-purple-400 dark:btn-warning dark:shadow-orange-300 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-black"
                     >
                         <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-                            <!-- <LockClosedIcon class="h-5 w-5 text-black" aria-hidden="true" /> -->
                         </span>
                         Register
                     </button>
                 </div>
                 <div class="ml-4 flex-shrink-0 self-center">or
-                  <router-link to="/login" class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-blue-400 dark:hover:text-blue-500"> Login </router-link>
+                  <router-link to="/login" class="font-medium text-red-600 hover:text-red-500 dark:text-blue-400 dark:hover:text-blue-500"> Login </router-link>
                 </div>
                 <ul>
                     <li class="alert alert-error rounded-none shadow-lg" v-for="[key,value] in Object.entries(registerErrors)">{{ key }} : {{ value }}</li>

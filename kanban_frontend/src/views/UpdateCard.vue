@@ -37,11 +37,11 @@ export default {
             if(!this.deadline){
                 this.deadline = this.card.deadline
             }
-            console.log("deadline",this.deadline)
-            console.log("conent",this.content)
-            console.log("title",this.title)
-            console.log("List_id",this.list_id)
-            console.log("card",this.card)
+            // console.log("deadline",this.deadline)
+            // console.log("conent",this.content)
+            // console.log("title",this.title)
+            // console.log("List_id",this.list_id)
+            // console.log("card",this.card)
             await this.DataStore.updateCard(this.card.card_id, this.list_id, this.title, this.content, this.deadline);
             this.title = ''
             this.content = ''
@@ -58,6 +58,7 @@ export default {
       <div class="mt-5 md:mt-0">
           <div class="shadow sm:rounded-md sm:overflow-hidden">
             <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                <div class="block text-base font-medium text-gray-700">To not update a field leave it blank</div>
                 <div class="col-span-6 sm:col-span-3">
                   <label for="list-name" class="block text-sm font-medium text-gray-700">List Name</label>
                   <select v-model="list_id" id="list-name" name="list-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">

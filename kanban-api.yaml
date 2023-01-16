@@ -1,0 +1,781 @@
+openapi: 3.0.0
+info:
+  title: Kanban App API
+  version: 1.0.0
+  description: >
+    <div>This is a RESTful CRUD API for the Kanban App designed by Kiran Prasath(21f1002124<br><br>
+          <i>Note: There are no API endpoints for User, Role and roles_users tables as they are takencare by Flask-Security</i>
+    </div><br>
+    <h3> User Table Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>username</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>email</td>
+        <td>String</td>
+        <td>Not Null, Unique</td>
+      </tr>      
+      <tr>
+        <td>password</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>      
+      <tr>
+        <td>active</td>
+        <td>Boolean</td>
+        <td></td>
+      </tr>
+    </tbody>
+    </table><br>
+    
+    <h3> Role Table Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>name</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>description</td>
+        <td>String</td>
+        <td></td>
+      </tr>
+    </tbody>
+    </table><br>
+    
+    <h3> List Table Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>list_id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>user_id</td>
+        <td>Integer</td>
+        <td>Foreign Key(user.id), Not Null</td>
+      </tr>
+      <tr>
+        <td>list_name</td>
+        <td>String</td>
+        <td>Not Null, Unique</td>
+      </tr>      
+      <tr>
+        <td>list_date</td>
+        <td>String</td>
+        <td></td>
+      </tr>      
+      <tr>
+        <td>score</td>
+        <td>Integer</td>
+        <td></td>
+      </tr>
+    </tbody>
+    </table><br>
+
+
+    <h3> Card Table Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>card_id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>list_id</td>
+        <td>Integer</td>
+        <td>Foreign Key (list.list_id), Not Null</td>
+      </tr>
+      <tr>
+        <td>title</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>content</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>created_time</td>
+        <td>String</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>deadline</td>
+        <td>String</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>completed_on</td>
+        <td>String</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>flag</td>
+        <td>Integer</td>
+        <td>default = 0</td>
+      </tr>
+    </tbody>
+    </table><br>
+
+    <h3> Error Codes </h3> 
+    <table>
+      <thead>
+        <th>Resource</th>
+        <th>Error Code</th>
+        <th>Message</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>User</td>
+        <td>USER_ERR_01</td>
+        <td>valid username is required</td>
+      </tr>
+      <tr>
+        <td>User</td>
+        <td>USER_ERR_02</td>
+        <td>valid email is required</td>
+      </tr>
+      <tr>
+        <td>List</td>
+        <td>LIST_ERR_01</td>
+        <td>valid list name is required</td>
+      </tr>
+      <tr>
+        <td>List</td>
+        <td>LIST_ERR_02</td>
+        <td>list date should be either None or should be in valid datetime format</td>
+      </tr>
+      <tr>
+        <td>List</td>
+        <td>LIST_ERR_03</td>
+        <td>score should be either None or<br> an integer</td>
+      </tr>
+      <tr>
+        <td>Card</td>
+        <td>CARD_ERR_01</td>
+        <td>valid card title is required</td>
+      </tr>
+      <tr>
+        <td>Card</td>
+        <td>CARD_ERR_02</td>
+        <td>valid content is required</td>
+      </tr>
+      <tr>
+        <td>Card</td>
+        <td>CARD_ERR_03</td>
+        <td>created time should be either None or should be in valid datetime format</td>
+      </tr>
+      <tr>
+        <td>Card</td>
+        <td>CARD_ERR_04</td>
+        <td>deadline should be either None or should be in valid datetime format</td>
+      </tr>
+      <tr>
+        <td>Card</td>
+        <td>CARD_ERR_05</td>
+        <td>completed_on should be either None or should be in valid datetime format</td>
+      </tr>
+      <tr>
+        <td>Card</td>
+        <td>CARD_ERR_06</td>
+        <td>flag can only take the values null/0/1</td>
+      </tr>
+    </tbody>
+    </table>
+
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/KIRANTEC22_1/kanban/1.0.0
+  - url: http://127.0.0.1:8080/
+  
+tags:
+  - name: List
+    description: Endpoints for List Resource
+  - name: Card
+    description: Endpoints for Card Resource
+      
+paths:    
+  /api/list/user/{user_id}:
+    description: End point to get all lists of a user
+    get:
+      tags:
+        - List
+      description: Operation to get all lists of a user
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Request Successfull
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    list_id:
+                      type: integer
+                    user_id:
+                      type: integer
+                    list_name:
+                      type: string
+                    list_date:
+                      type: string
+                    score:
+                      type: integer
+                example:
+                  - list_id: 1
+                    user_id: 1
+                    list_name: "Reminders"
+                    list_date: "11/09/2022 12:43 PM"
+                    score: 5
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal Server Error
+                    
+
+  /api/list/{list_id}:
+    description: End point for List Resources
+    get:
+      tags:
+        - List
+      description: Operation to get list
+      parameters:
+        - in: path
+          name: list_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                title: list object
+                type: object
+                properties:
+                  list_id:
+                    type: integer
+                    example: 1
+                  user_id:
+                    type: integer
+                    example: 1
+                  list_name:
+                    type: string
+                    example: list1
+                  list_date:
+                    type: string
+                    example: time
+                  score:
+                    type: integer
+                    example: 60
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal Server Error
+          
+    put:
+      tags:
+        - List
+      description: Operation to update List
+      parameters:
+        - in: path
+          name: list_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                  list_name:
+                    type: string
+                    example: list1
+                  list_date:
+                    type: string
+                    example: time
+                  score:
+                    type: integer
+                    example: 5
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                title: list object
+                type: object
+                properties:
+                  list_id:
+                    type: integer
+                    example: 1
+                  user_id:
+                    type: integer
+                    example: 1
+                  list_name:
+                    type: string
+                    example: list1
+                  list_date:
+                    type: string
+                    example: time
+                  score:
+                    type: integer
+                    example: 6
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - List
+      description: Operation to delete list
+      parameters:
+        - in: path
+          name: list_id
+          required: true
+          schema:
+            type: integer
+            example: 1           
+      responses:
+        '200':
+          description: Successfully Deleted
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '404':
+          description: Resource does not exist
+        '500':
+          description: Intenal Server Error
+          
+        
+  /api/list:
+    description: End point to create a list
+    post:
+      tags:
+        - List
+      description: Operation to create list
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                list_name:
+                  type: string
+                  example: list2
+                list_date:
+                  type: string
+                  example: time
+                total_score:
+                  type: integer
+                  example: 4
+      responses:
+        '201':
+          description: Successfully Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '500':
+          description: Internal Server Error
+          
+  /api/card/list/{list_id}:
+    description: Endpoint to get all cards of a list
+    get:
+      tags:
+        - Card
+      description: Operation to get all cards of a list
+      parameters:
+        - in: path
+          name: list_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Request Successfull
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    card_id:
+                      type: integer
+                    list_id:
+                      type: integer
+                    title:
+                      type: string
+                    created_time:
+                      type: string
+                    content:
+                      type: string
+                    deadine:
+                      type: string
+                    completed_on:
+                      type: string
+                    flag:
+                      type: string
+                example:
+                  - card_id: 1
+                    list_id: 1
+                    title: "IITMOD"
+                    content: "Project Submission"
+                    created_time: "11/09/2022 12:43 PM"
+                    deadline : "13/09/2022 12:00 PM"
+                    completed_on: "12/09/2022 11:15 PM"
+                    flag: 0
+                
+  /api/card/{card_id}:
+    description: Endpoint for Card Resource
+    get:
+      tags:
+        - Card
+      description: Operation to get card
+      parameters:
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                title: card object
+                type: object
+                properties:
+                  card_id:
+                    type: integer
+                    example: 1
+                  list_id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: IITMOD
+                  content:
+                    type: string
+                    example: Projection Submission
+                  created_time:
+                    type: string
+                    example: "12/09/2022 11:15 PM"
+                  deadline:
+                    type: string
+                    example: "13/09/2022 11:15 PM"
+                  completed_on:
+                    type: string
+                    example: "14/09/2022 11:15 PM"
+                  flag:
+                    type: integer
+                    example: 0
+                  
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal Server Error
+    put:
+      tags:
+        - Card
+      description: Operation to update card
+      parameters:
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                  title:
+                    type: string
+                    example: IITMOD
+                  content:
+                    type: string
+                    example: Projection Submission
+                  deadline:
+                    type: string
+                    example: "13/09/2022 11:15 PM"
+                  completed_on:
+                    type: string
+                    example: "14/09/2022 11:15 PM"
+                  flag:
+                    type: integer
+                    example: 0
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                title: list object
+                type: object
+                properties:
+                  card_id:
+                    type: integer
+                    example: 1
+                  list_id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: IITMOD
+                  content:
+                    type: string
+                    example: Projection Submission
+                  deadline:
+                    type: string
+                    example: "13/09/2022 11:15 PM"
+                  completed_on:
+                    type: string
+                    example: "14/09/2022 11:15 PM"
+                  flag:
+                    type: integer
+                    example: 0            
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal Server Error
+
+    delete:
+      tags:
+        - Card
+      description: Operation to delete card
+      parameters:
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 1           
+      responses:
+        '200':
+          description: Successfully Deleted
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string                    
+                  error_message:
+                    type: string
+        '404':
+          description: Resource does not exist
+        '500':
+          description: Intenal Server Error
+  
+  /api/card:
+    description: End point to create card
+    post:
+      tags:
+        - Card
+      description: Operation to create card
+      requestBody:
+        content:
+          application/json:
+            schema:
+                title: deck object
+                type: object
+                properties:
+                  list_id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: IITMOD
+                  content:
+                    type: string
+                    example: Projection Submission
+                  created_time:
+                    type: string
+                    example: "12/09/2022 11:15 PM"
+                  deadline:
+                    type: string
+                    example: "13/09/2022 11:15 PM"
+                  completed_on:
+                    type: string
+                    example: "14/09/2022 11:15 PM"
+                  flag:
+                    type: integer
+                    example: 0
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                title: card object
+                type: object
+                properties:
+                  card_id:
+                    type: integer
+                    example: 1
+                  list_id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: IITMOD
+                  content:
+                    type: string
+                    example: Projection Submission
+                  created_time:
+                    type: string
+                    example: "12/09/2022 11:15 PM"
+                  deadline:
+                    type: string
+                    example: "13/09/2022 11:15 PM"
+                  completed_on:
+                    type: string
+                    example: "14/09/2022 11:15 PM"
+                  flag:
+                    type: integer
+                    example: 0
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string        
+        '500':
+          description: Internal Server Error

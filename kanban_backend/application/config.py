@@ -2,6 +2,8 @@ import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+REDIS_HOST = os.getenv("REDIS_HOST", "127.0.0.1")\
+    
 class Config():
     DEBUG = False
     SQLITE_DB_DIR = None
@@ -30,3 +32,7 @@ class LocalDevelopmentConfig(Config):
     WTF_CSRF_TIME_LIMIT = None
     SECURITY_TOKEN_AUTHENTICATION_HEADER = "Authentication-Token"
     UPLOAD_FOLDER = os.path.join(basedir, '../static/files')
+    ##
+    CELERY_BROKER_URL = 'redis://{}:6379/1'.format(REDIS_HOST)
+    CELERY_RESULT_BACKEND = 'redis://{}:6379/2'.format(REDIS_HOST)
+    REDIS_URL = 'redis://{}:6379'.format(REDIS_HOST)

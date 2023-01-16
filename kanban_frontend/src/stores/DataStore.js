@@ -25,23 +25,36 @@ export const useDataStore = defineStore("DataStore", {
         },
     },
     actions: {
-        // pushJob(job_id,list_id,list_name){
-        //     this.backend_jobs.unshift({
-        //         job_id: job_id,
-        //         list_id: list_id,
-        //         list_name: list_name,
-        //         status: 'pending',
-        //         url: ''
-        //     })
-        // },
-        // finishedJob(job_id,url){
-        //     this.backend_jobs.forEach(job => {
-        //         if(job.job_id == job_id){
-        //             job.status = 'succeeded';
-        //             job.url = url;
-        //         }
-        //     })
-        // },
+        pushListJob(job_id,list_id,list_name){
+            this.backend_jobs.unshift({
+                job_id: job_id,
+                list_id: list_id,
+                list_name: list_name,
+                status: 'pending',
+                url: ''
+            })
+        },
+        pushCardJob(job_id,card_id,title,content,deadline,completed_on,flag){
+            this.backend_jobs.unshift({
+                job_id: job_id,
+                card_id: card_id,
+                title: title,
+                content: content,
+                deadline: deadline,
+                completed_on: completed_on,
+                flag: flag,
+                status: 'pending',
+                url: ''
+            })
+        },
+        finishedJob(job_id,url){
+            this.backend_jobs.forEach(job => {
+                if(job.job_id == job_id){
+                    job.status = 'succeeded';
+                    job.url = url;
+                }
+            })
+        },
         async fetchData(alert=true) {
             const AlertStore = useAlertStore();
             const AuthStore = useAuthStore();
@@ -156,12 +169,12 @@ export const useDataStore = defineStore("DataStore", {
                         this.cards.splice(i,1);
                         i--;
                     }
-                    this.cards.push(data);
-                    AlertStore.pushAlert({
-                        type: 'info',
-                        message: 'New card added'
-                    })
                 }
+                this.cards.push(data);
+                AlertStore.pushAlert({
+                    type: 'info',
+                    message: `Deleted the card with card_id ${card_id}`
+                })
             })
             .catch(err => {
                 AlertStore.pushAlert({
@@ -343,133 +356,70 @@ export const useDataStore = defineStore("DataStore", {
                 });
         },
 
-                // async doReview(list_id,result){
-        //     try {
-        //         const AlertStore = useAlertStore();
-        //         const AuthStore = useAuthStore();
+        async exportList(list_id,list_name){
+            const AlertStore = useAlertStore();
+            const AuthStore = useAuthStore();
+            await fetch(`${import.meta.env.VITE_BACKEND_URL}/export_list/${AuthStore.userId}/${list_id}}`, {
+                    "method": "GET",
+                    "headers": {
+                        "Authentication-Token": AuthStore.authenticationToken,
+                        "Content-Type": "application/json"
+                    }
+                    })
+                .then(resp => {
+                    if(parseInt(resp.status) >= 400){
+                        throw Error("Unable to export list");
+                    }
+                    return resp.json();
+                })
+                .then(data => {
+                    console.log(data);
+                    this.pushListJob(data.job_id,list_id,list_name);
+                    AlertStore.pushAlert({
+                        type: 'warning',
+                        message: `Export list ${list_id} job sent to backend`
+                    })
+                })
+                .catch(err => {
+                    AlertStore.pushAlert({
+                        type: 'error',
+                        message: 'Unable to export list'
+                    })
+                console.log(err);
+                });
+        },
 
-        //         console.log("Inside do review");
-        //         console.log(result);
-
-        //         await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/deck/update_lrt/${deck_id}`, {
-        //             "method": "PUT",
-        //             "headers": {
-        //                 "Authentication-Token": AuthStore.authenticationToken,
-        //                 "Content-Type": "application/json"
-        //             },
-        //             "body": JSON.stringify({"last_review_time":new Date().toLocaleString()})
-        //             })
-        //         console.log('update_lrt')
-        //         let total_points = 0;
-        //         for(const card of result){
-        //             await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/card/update_difficulty/${card.card_id}`, {
-        //                 "method": "PUT",
-        //                 "headers": {
-        //                     "Authentication-Token": AuthStore.authenticationToken,
-        //                     "Content-Type": "application/json"
-        //                 },
-        //                 "body": JSON.stringify({"difficulty":card.difficulty})
-        //                 })   
-        //             total_points += parseInt(card.score);
-        //         }
-        //         let total_score = Math.floor((total_points/(3*result.length))*100);
-        //         console.log("Total Score " + total_score);
-        //         console.log('update_difficulty')
-        //         await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/deck/update_ts/${deck_id}`, {
-        //             "method": "PUT",
-        //             "headers": {
-        //                 "Authentication-Token": AuthStore.authenticationToken,
-        //                 "Content-Type": "application/json"
-        //             },
-        //             "body": JSON.stringify({"total_score":total_score})
-        //             })
-        //         console.log('update_ts')
-        //         this.fetchData(false);
-        //         AlertStore.pushAlert({
-        //             type: 'success',
-        //             message: `Review done for deck ${deck_id}`
-        //         });
-        //     }
-        //     catch(err){
-        //         console.log(err)
-        //         AlertStore.pushAlert({
-        //             type: 'error',
-        //             message: `Couldn't do the review for ${deck_id}`
-        //         })
-        //     }
-        // },
-        
-        // async updateWebhookUrl(webhook_url){
-        //     const AlertStore = useAlertStore();
-        //     const AuthStore = useAuthStore();
-
-        //     const data = {
-        //         webhook_url: webhook_url,
-        //     }
-
-        //     await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/update_webhook_url/${AuthStore.userId}`, {
-        //         "method": "PUT",
-        //         "headers": {
-        //             "Authentication-Token": AuthStore.authenticationToken,
-        //             "Content-Type": "application/json"
-        //         },
-        //         "body": JSON.stringify(data)
-        //     })
-        //     .then(resp => {
-        //         if(parseInt(resp.status) >= 400){
-        //             throw Error("Unable to update webhook url");
-        //         }
-        //         return resp.json();
-        //     })
-        //     .then(data => {
-        //         this.user.webhook_url = webhook_url;
-        //         AlertStore.pushAlert({
-        //             type: 'info',
-        //             message: 'Webhook URL Updated'
-        //         })
-        //     })
-        //     .catch(err => {
-        //         AlertStore.pushAlert({
-        //             type: 'error',
-        //             message: 'Unable to update webhook url'
-        //         })
-        //         console.log(err);
-        //     })
-
-        //     console.log(data);
-        // },
-
-        // async exportDeck(deck_id,deck_name){
-        //     const AlertStore = useAlertStore();
-        //     const AuthStore = useAuthStore();
-        //     await fetch(`${import.meta.env.VITE_BACKEND_URL}/export_deck/${AuthStore.userId}/${deck_id}`, {
-        //             "method": "GET",
-        //             "headers": {
-        //                 "Authentication-Token": AuthStore.authenticationToken,
-        //                 "Content-Type": "application/json"
-        //             }
-        //             })
-        //         .then(resp => {
-        //             if(parseInt(resp.status) >= 400){
-        //                 throw Error("Unable to export deck");
-        //             }
-        //             return resp.json();
-        //         })
-        //         .then(data => {
-        //             console.log(data);
-        //             this.pushJob(data.job_id,deck_id,deck_name);
-        //             AlertStore.pushAlert({
-        //                 type: 'warning',
-        //                 message: `Export deck ${deck_id} job sent to backend`
-        //             })
-        //         })
-        //         .catch(err => {
-        //             AlertStore.pushAlert({
-        //                 type: 'error',
-        //                 message: 'Unable to export deck'
-        //             })
-        //         console.log(err);
-        //         });
-        // }
+        async exportCard(card_id,title,content,deadline,completed_on,flag){
+            const AlertStore = useAlertStore();
+            const AuthStore = useAuthStore();
+            await fetch(`${import.meta.env.VITE_BACKEND_URL}/export_card/${AuthStore.userId}/${card_id}}`, {
+                    "method": "GET",
+                    "headers": {
+                        "Authentication-Token": AuthStore.authenticationToken,
+                        "Content-Type": "application/json"
+                    }
+                    })
+                .then(resp => {
+                    if(parseInt(resp.status) >= 400){
+                        throw Error("Unable to export list");
+                    }
+                    return resp.json();
+                })
+                .then(data => {
+                    console.log(data);
+                    this.pushCardJob(data.job_id,card_id,title,content,deadline,completed_on,flag);
+                    AlertStore.pushAlert({
+                        type: 'warning',
+                        message: `Export Card ${card_id} job sent to backend`
+                    })
+                })
+                .catch(err => {
+                    AlertStore.pushAlert({
+                        type: 'error',
+                        message: 'Unable to export list'
+                    })
+                console.log(err);
+                });
+        }
     }
 })

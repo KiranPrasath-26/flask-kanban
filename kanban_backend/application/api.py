@@ -292,7 +292,7 @@ class CardAPI(Resource):
         validate_content(content)
         validate_deadline(deadline)
         validate_completed_on(completed_on)
-        validate_flag(flag)
+        # validate_flag(flag)
 
         card.title = title
         card.content = content
@@ -329,7 +329,7 @@ class CardAPI(Resource):
         validate_created_time(created_time)
         validate_deadline(deadline)
         validate_completed_on(completed_on)
-        validate_flag(flag)
+        # validate_flag(flag)
 
         list = get_list(list_id)
         if list is None:

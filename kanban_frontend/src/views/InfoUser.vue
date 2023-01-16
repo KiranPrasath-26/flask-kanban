@@ -26,10 +26,6 @@ const DataStore = useDataStore();
           <dt class="text-sm font-medium text-gray-500">Email address</dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ DataStore.user.email }}</dd>
         </div>
-        <!-- <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-gray-500">Webhook URL</dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ DataStore.user.webhook_url }}</dd>
-        </div> -->
         <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500">Number of Lists</dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ DataStore.lists.length }}</dd>
@@ -44,11 +40,7 @@ const DataStore = useDataStore();
 </template>
 
 <script>
-// import { PaperClipIcon } from '@heroicons/vue/solid'
 
 export default {
-  // components: {
-  //   PaperClipIcon,
-  // },
 }
 </script>

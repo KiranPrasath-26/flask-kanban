@@ -58,19 +58,15 @@ export default {
     <div
         class="w-screen h-screen flex flex-col align-middle items-center justify-center py-12 px-4 sm:px-6 lg:px-8 cool-bg"
     >
-        <div class="max-w-md w-full space-y-8 app-card cool-shadow">
+        <div class="max-w-md w-full space-y-8 app-card cool-shadow shadow-md">
             <div>
-                <!-- <img
-                    src="/FlashCardApp-logo.png"
-                    alt="FlashCardApp-logo"
-                    class="w-full h-20 object-cover rounded-lg shadow-xl bg-black mx-auto"
-                /> -->
+                <h1 class="mt-6 text-center text-4xl font-extrabold text-gray-900 dark:text-slate-100">KANBAN</h1>
                 <h2
                     class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-slate-100"
                 >Login to your account</h2>
             </div>
             <input type="hidden" name="remember" value="true" />
-            <div class="rounded-md shadow-sm -space-y-px">
+            <div class="rounded-md shadow-sm -space-y-px mr-15">
                 <div>
                         <label for="email-address" class="sr-only">Email address</label>
                         <input
@@ -101,7 +97,7 @@ export default {
 
                 <div @click="login()">
                     <button
-                        class="btn shadow-md btn-info shadow-blue-400 dark:btn-warning dark:shadow-orange-300 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-black"
+                        class="btn shadow-md btn-info shadow-purple-400 dark:btn-warning dark:shadow-orange-300 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-black"
                     >
                         <span class="absolute left-0 inset-y-0 flex items-center pl-3">
                         </span>
@@ -109,7 +105,7 @@ export default {
                     </button>
                 </div>
                 <div class="ml-4 flex-shrink-0 self-center">or
-                  <router-link to="/register" class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-blue-400 dark:hover:text-blue-500"> Register </router-link>
+                  <router-link to="/register" class="font-medium text-red-600 hover:text-red-500"> Register </router-link>
                 </div>
                 <div>
                     <div class="alert alert-error rounded-none shadow-lg" v-for="[key,value] in Object.entries(loginErrors)">{{ key }} : {{ value }}</div>

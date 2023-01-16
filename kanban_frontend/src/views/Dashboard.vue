@@ -1,7 +1,5 @@
 <script>
 import { useDataStore } from '@/stores/DataStore';
-import { useAlertStore } from '@/stores/AlertStore';
-import carddash from '@/components/carddash.vue';
 import listdash from '@/components/listdash.vue';
 export default {
     setup() {

@@ -12,6 +12,6 @@
 - run `npm install` to install all the dependancy reqired for the vite app
 - run `npm run dev` to run the vite app in development mode
 
-#port
+# Port
 - http://localhost:5173 - Enter this link to access the vite app
 - http://localhost:8080 - Enter this link to access the flask app
